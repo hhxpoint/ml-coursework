@@ -1,0 +1,91 @@
+# ============================================================
+# BirdCLEF 2026 — configs/v24_soft_pseudo.yaml
+# v24 Recipe: Soft Pseudo Labels (Best single model: 0.8141 AUC)
+#
+# Key technique: r5 soft KD ×10 + hard pseudo ×5
+# Discovery: +0.039 AUC over v9 baseline (no pseudo)
+# ============================================================
+
+# --- Paths ---
+data_dir: "./data"
+train_audio_dir: "./data/train_audio"
+train_soundscape_dir: "./data/train_soundscapes"
+test_soundscape_dir: "./data/test_soundscapes"
+train_csv: "./data/train.csv"
+taxonomy_csv: "./data/taxonomy.csv"
+soundscape_labels_csv: "./data/train_soundscape_labels.csv"
+soft_pseudo_csv: "./data/pseudo/soft_pseudo_r5.csv"
+hard_pseudo_csv: "./data/pseudo/hard_pseudo_r5.csv"
+output_dir: "./output/v24"
+
+# --- Audio ---
+sample_rate: 32000
+n_fft: 1024
+hop_length: 320
+n_mels: 128
+fmin: 50
+fmax: 16000
+train_duration: 10.0
+infer_duration: 5.0
+use_pcen: true
+
+# --- Model ---
+backbone: "tf_efficientnet_b0.ns_jft_in1k"
+in_channels: 3
+num_classes: 234
+dropout: 0.1
+gem_pool: true
+gem_p_init: 3.0
+dual_loss: true
+dual_clip_weight: 0.5
+dual_frame_weight: 0.5
+
+# --- Training ---
+seed: 42
+device: "cuda"
+num_workers: 4
+epochs: 35
+batch_size: 32
+lr: 5.0e-4
+warmup_epochs: 3
+scheduler: "cosine"
+patience: 7
+use_amp: true
+
+# --- ASL Loss ---
+asl_gamma_neg: 4.0
+asl_gamma_pos: 0.0
+asl_clip: 0.05
+
+# --- Augmentation ---
+mixup_alpha: 0.5
+circ_shift_prob: 0.5
+specaugment_time_masks: 2
+specaugment_time_mask_param: 0.15
+specaugment_freq_masks: 2
+specaugment_freq_mask_param: 40
+noise_level: 0.005
+gain_min: 0.7
+gain_max: 1.3
+aug_filter: true
+aug_filter_p: 0.3
+aug_background_noise: true
+aug_noise_p: 0.3
+
+# --- Data ---
+clips_per_file: 3
+soundscape_oversample: 5
+soft_pseudo_oversample: 10
+hard_pseudo_oversample: 5
+combined_pseudo_oversample: 0  # Not used in v24
+
+# --- Post-processing ---
+lmax_alpha: 0.1
+lmax_radius: 1
+lmax_aves_start: 72
+lscale: 0.9
+richness_temp: 0.15
+richness_threshold: 0.5
+richness_cp_blend: 0.60
+richness_cp_threshold: 0.05
+apply_postprocessing: true

@@ -1,0 +1,61 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 数据集用数据结构组织好
+X = np.array([
+    [0.697, 0.460], [0.774, 0.376], [0.634, 0.264], [0.608, 0.318], [0.556, 0.215],
+    [0.403, 0.237], [0.481, 0.149], [0.437, 0.211], [0.666, 0.091], [0.243, 0.267],
+    [0.245, 0.057], [0.343, 0.099], [0.639, 0.161], [0.657, 0.198], [0.360, 0.370],
+    [0.593, 0.042], [0.719, 0.103]
+])
+y = np.array([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).reshape(-1, 1)
+
+# 做增广矩阵，方便计算
+X_hat = np.c_[X, np.ones(X.shape[0])] 
+
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+# 梯度下降法
+def train_logistic_regression(X, y, learning_rate=0.1, num_iters=10000):
+    m, n = X.shape
+    beta = np.zeros((n, 1)) 
+    
+    for i in range(num_iters):
+        z = np.dot(X, beta)
+        p1 = sigmoid(z)
+        # 计算梯度
+        gradient = -np.dot(X.T, (y - p1)) / m
+        # 更新参数
+        beta = beta - learning_rate * gradient
+        
+    return beta
+
+# 训练
+beta_opt = train_logistic_regression(X_hat, y, learning_rate=0.5, num_iters=10000)
+w1, w2, b = beta_opt[0][0], beta_opt[1][0], beta_opt[2][0]
+
+print("--- 3.3 对率回归结果 ---")
+print(f"求得的权重 w1 (密度): {w1:.4f}")
+print(f"求得的权重 w2 (含糖率): {w2:.4f}")
+print(f"求得的偏置 b: {b:.4f}")
+print(f"决策边界方程: {w1:.4f}*x1 + {w2:.4f}*x2 + {b:.4f} = 0")
+
+# 可视化结果
+plt.rcParams['font.sans-serif'] = ['SimHei'] 
+plt.rcParams['axes.unicode_minus'] = False
+
+plt.scatter(X[y[:,0]==1][:,0], X[y[:,0]==1][:,1], color='g', marker='o', label='好瓜 (1)')
+plt.scatter(X[y[:,0]==0][:,0], X[y[:,0]==0][:,1], color='r', marker='x', label='坏瓜 (0)')
+
+# 画出决策边界 w1*x1 + w2*x2 + b = 0  => x2 = -(w1*x1 + b) / w2
+x1_plot = np.array([0.1, 0.9])
+x2_plot = -(w1 * x1_plot + b) / w2
+plt.plot(x1_plot, x2_plot, color='blue', label='Logistic决策边界')
+
+plt.title('西瓜数据集 3.0a - 对率回归')
+plt.xlabel('密度')
+plt.ylabel('含糖率')
+plt.legend()
+plt.show()

@@ -1,0 +1,72 @@
+{
+  "dataset": {
+    "n_classes": 20,
+    "n_total": 202,
+    "n_train": 420,
+    "n_test": 62,
+    "person_names": [
+      "Person-20",
+      "Person_01",
+      "Person_02",
+      "Person_03",
+      "Person_04",
+      "Person_05",
+      "Person_06",
+      "Person_07",
+      "Person_08",
+      "Person_09",
+      "Person_10",
+      "Person_11",
+      "Person_12",
+      "Person_13",
+      "Person_14",
+      "Person_15",
+      "Person_16",
+      "Person_17",
+      "Person_18",
+      "Person_19"
+    ]
+  },
+  "model": {
+    "pca_dim": 100,
+    "lda_dim": 19,
+    "classifier": "LinearSVM",
+    "features": "HOG"
+  },
+  "classification": {
+    "overall_accuracy": 0.8387096774193549,
+    "per_class_accuracy": {
+      "Person-20": 1.0,
+      "Person_01": 0.6666666666666666,
+      "Person_02": 1.0,
+      "Person_03": 0.8,
+      "Person_04": 1.0,
+      "Person_05": 1.0,
+      "Person_06": 0.6666666666666666,
+      "Person_07": 0.6666666666666666,
+      "Person_08": 1.0,
+      "Person_09": 1.0,
+      "Person_10": 0.3333333333333333,
+      "Person_11": 1.0,
+      "Person_12": 1.0,
+      "Person_13": 1.0,
+      "Person_14": 0.3333333333333333,
+      "Person_15": 1.0,
+      "Person_16": 0.6666666666666666,
+      "Person_17": 1.0,
+      "Person_18": 0.6666666666666666,
+      "Person_19": 1.0
+    }
+  },
+  "reconstruction": {
+    "pca_full": {
+      "avg_mse": 0.0,
+      "avg_psnr": 0.0
+    },
+    "pca_lda": {
+      "avg_mse": 0.0,
+      "avg_psnr": 0.0
+    },
+    "sample_details": []
+  }
+}

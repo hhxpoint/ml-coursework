@@ -1,0 +1,112 @@
+# ============================================================
+# BirdCLEF 2026 — Proven Best Formula (v28 template)
+# ============================================================
+
+# --- Paths ---
+data_dir: "./data"
+train_audio_dir: "./data/train_audio"
+train_soundscape_dir: "./data/train_soundscapes"
+test_soundscape_dir: "./data/test_soundscapes"
+train_csv: "./data/train.csv"
+taxonomy_csv: "./data/taxonomy.csv"
+soundscape_labels_csv: "./data/train_soundscapes_labels.csv"
+# Pseudo labels
+soft_pseudo_csv: "./data/pseudo/soft_pseudo_r5.csv"
+hard_pseudo_csv: "./data/pseudo/hard_pseudo_r5.csv"
+combined_pseudo_csv: "./data/pseudo/combined_pseudo_r4r5.csv"
+# Output
+output_dir: "./output"
+checkpoint_dir: "./checkpoints"
+submission_dir: "./submissions"
+
+# --- Audio Processing ---
+sample_rate: 32000
+n_fft: 1024
+hop_length: 320
+n_mels: 128
+fmin: 50
+fmax: 16000
+train_duration: 10.0        # Train on 10s windows
+infer_duration: 5.0         # Infer on 5s windows
+use_pcen: true              # PCEN is critical (nPCEN hurts -0.049 AUC)
+pcen_time_constant: 0.06
+pcen_floor: 1e-10
+pcen_smooth: 1e-10
+
+# --- Model ---
+backbone: "tf_efficientnet_b0.ns_jft_in1k"
+in_channels: 3              # 3-channel mel input
+num_classes: 234
+dropout: 0.1
+# GEM Pooling
+gem_pool: true
+gem_p_init: 3.0
+
+# --- Training ---
+seed: 42
+device: "cuda"
+num_workers: 4
+epochs: 35
+batch_size: 32
+lr: 5.0e-4
+warmup_epochs: 3
+scheduler: "cosine"
+# ASL Loss (γ−=4, γ+=0, clip=0.05)
+asl_gamma_neg: 4.0
+asl_gamma_pos: 0.0
+asl_clip: 0.05
+# Dual Loss (clip + frame)
+dual_loss: true
+dual_clip_weight: 0.5
+dual_frame_weight: 0.5
+# Mixup
+mixup_alpha: 0.5
+# Circular Shift Augmentation
+circ_shift_prob: 0.5
+# SpecAugment
+specaugment_time_masks: 2
+specaugment_time_mask_param: 0.15
+specaugment_freq_masks: 2
+specaugment_freq_mask_param: 40
+# Noise Augmentation
+noise_level: 0.005
+gain_min: 0.7
+gain_max: 1.3
+# Labeled data
+clips_per_file: 3
+# Soundscape oversample
+soundscape_oversample: 5
+# Soft pseudo (r5, 1176 clips × 10)
+soft_pseudo_oversample: 10
+# Hard pseudo (r5, 1168 clips × 5)
+hard_pseudo_oversample: 5
+# Combined pseudo (r4r5, 6601 clips × 10) — for v30/4fold
+combined_pseudo_oversample: 10
+
+# --- Validation ---
+val_soundscape_files: 13     # Fixed validation split
+
+# --- Inference ---
+onnx_threads: 8
+onnx_batch_size: 64
+
+# --- Post-processing ---
+# lmax_pre_aves
+lmax_alpha: 0.1
+lmax_radius: 1
+lmax_aves_start: 72         # Aves class start index
+# Logit scale
+lscale: 0.9
+# SoftmaxRichness
+richness_temp: 0.15
+richness_threshold: 0.5
+richness_cp_blend: 0.60
+richness_cp_threshold: 0.05
+# cSEBBs change-point
+csebbs_threshold: 0.06
+csebbs_blend: 0.60
+
+# --- Ensemble ---
+ensemble_weights: [1.5, 1.5, 1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0]
+perch_weight: 0.45
+sed_weight: 0.55
