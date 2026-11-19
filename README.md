@@ -123,3 +123,27 @@ python -m py_compile face/*.py catdog/*.py birdclef2026/*.py DL/*.py
 ## License
 
 代码 MIT License，详见 [LICENSE](LICENSE)。数据集、预训练模型、课程报告遵循各自来源许可。
+
+
+---
+
+## 子项目说明
+
+| 子项目 | 内容 | 主要文件 |
+|---|---|---|
+| face | PCA/LDA 人脸识别 | `face/` |
+| catdog | 猫狗图像分类 | `catdog/` |
+| birdclef2026 | BirdCLEF 音频分类 | `birdclef2026/` |
+| DL | 深度学习实验 | `DL/` |
+| ML | 传统机器学习实验 | `ML/` |
+
+> 原始数据集、模型权重、报告和照片未纳入公开仓库，避免隐私/体积问题；仅保留源码、配置、结果图与运行说明。
+
+## 环境
+
+```bash
+python -m venv .venv
+pip install numpy pandas scikit-learn matplotlib tensorflow
+```
+
+各子项目依赖以目录内 `requirements.txt` / notebook 为准。
